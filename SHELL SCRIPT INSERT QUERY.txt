@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# MySQL credentials
+USER="root"
+PASSWORD="Root@123"
+DATABASE="Fascia"
+
+# SQL query
+QUERY="SELECT 
+    last_state_change,
+    DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d 00:00:00 ') AS actual,   
+    UNIX_TIMESTAMP(DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d 00:00:00 ')) AS last_check,
+    next_check,
+    last_time_up,
+    last_time_down,
+    last_update,
+    host_name,
+    plugin_output,
+    performance_data,
+    scheduled_downtime_depth,
+    current_state   
+FROM (
+SELECT 
+last_state_change,
+    from_unixtime(min(last_check)) AS last_check,
+    next_check,
+    last_time_up,
+    last_time_down,
+    last_update,
+    host_name,
+    plugin_output,
+    performance_data,
+    scheduled_downtime_depth,
+    current_state
+    from hosts 
+WHERE last_check BETWEEN UNIX_TIMESTAMP(DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d 00:00:00')) AND UNIX_TIMESTAMP(DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d 23:59:59'))
+GROUP BY host_name) as tmp;"
+
+# Execute the query
+mysql -u "$USER" -p"$PASSWORD" "$DATABASE" -e "$QUERY"
