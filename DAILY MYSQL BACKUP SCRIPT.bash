@@ -1,3 +1,8 @@
+: <<'END_COMMENT'
+                    Written By G.L.Damodar Reddy 
+                    Mysql Daily Backup Bash Script
+END_COMMENT
+
 #!/bin/bash
 
 # Define MySQL/MariaDB credentials and database information
@@ -5,16 +10,16 @@ MYSQL_USER="root"
 MYSQL_PASSWORD="Root@123"
 MYSQL_DATABASE="fascia"
 
-# Define the backup directory
+# Define the backup directory as per you're requirement 
 BACKUP_DIR="/opt/backups"
 
-# Define the backup log file
+# Define the backup log file path and file name as per you're requiement
 BACKUP_LOG_FILE="/opt/backup_file.txt"
 
 # Current date
 CURRENT_DATE=$(date +'%Y-%m-%d')
 
-# Define the SQL queries for hosts and services
+# Defined SQL queries for hosts and services to take backup
 
 HOSTS_SQL_QUERY="last_check >= UNIX_TIMESTAMP(DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d 00:00:00')) AND last_check <= UNIX_TIMESTAMP(DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d 23:59:59'))"
 
